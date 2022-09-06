@@ -1,19 +1,20 @@
 import java.lang.Math;
 
 
+// A class declared to save the number of inputs in each array and the actual count to sort each array
 class TableColumn {
-    public int number_of_inputs, actual_count, worst_case;
+    public int number_of_inputs, actual_count;
 
     TableColumn(int n, int count) {
         this.number_of_inputs = n;
         this.actual_count = count;
-        this.worst_case = n*n;
     }
 }
 
 public class InsertionSort {
 
     int getRandomNumber(int min, int max) {
+        // Get a random number
         return (int) (Math.random() * (max - min)) + min;
     }
 
@@ -77,7 +78,6 @@ public class InsertionSort {
 
             // Sorting the array
             counter = 0;
-            
 
             for(int i=1; i<totalNumberOfElements; i++) {
                 // Incrementing the counter for the first time the 'i' counter is initialized and everytime it is incremented
@@ -131,7 +131,7 @@ public class InsertionSort {
         System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------------------"));
         for(int k=0; k<tableElementsIndexCounter; k++) {
             System.out.println(String.format("%10d %25s %10d %25s %10d", tableColumnsArray[k].number_of_inputs, "|",
-            tableColumnsArray[k].actual_count, "|", tableColumnsArray[k].worst_case));
+            tableColumnsArray[k].actual_count, "|", (tableColumnsArray[k].number_of_inputs * tableColumnsArray[k].number_of_inputs)));
         }
     }
 }
