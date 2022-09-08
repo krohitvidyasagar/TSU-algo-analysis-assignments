@@ -1,15 +1,7 @@
 import java.lang.Math;
+import java.util.HashMap;
+import java.util.Map;
 
-
-// A class declared to save the number of inputs in each array and the actual count to sort each array
-class TableColumn {
-    public int number_of_inputs, actual_count;
-
-    TableColumn(int n, int count) {
-        this.number_of_inputs = n;
-        this.actual_count = count;
-    }
-}
 
 public class InsertionSort {
 
@@ -43,27 +35,26 @@ public class InsertionSort {
         InsertionSort insertionSortObj = new InsertionSort();
 
         // Setting the min and max number of sets/arrays
-        int minNumberOfSets = 10, maxNumberOfSets = 12;
+        int minNumberOfSets = 10, maxNumberOfSets = 13;
         
         // Determining the total number of sets or arrays to be sorted
         int totalNumberOfSets = insertionSortObj.getRandomNumber(minNumberOfSets, maxNumberOfSets);
         System.out.println("Total number of sets: " + totalNumberOfSets + "\n");
 
-        TableColumn[] tableColumnsArray = new TableColumn[totalNumberOfSets];
-
         // Initializing an empty array
-        int[] arr = new int[30];
+        int[] arr = new int[60];
 
         // Setting the min and max number of elements for each array and declaring total number of elements
-        int minNumberOfElements=10, maxNumberOfElements=25, totalNumberOfElements;
+        int minNumberOfElements=30, maxNumberOfElements=60, totalNumberOfElements;
 
         // Declaring the variables to be used for sorting
         int key, j;
 
-        // Declaring the counter for actual count of instructions being run
+        // Declaring the counter to maintain the actual count of instructions being run
         int counter;
 
-        int tableElementsIndexCounter = 0;
+        // Initializing a map to maintain a record of the number of inputs and the number of insturctions taken to sort the array
+        Map<Integer, Integer> inputToActualCountMap = new HashMap<>();
 
         while(totalNumberOfSets > 0) {
             // Determining the total number of elements for an array using a randomizer
@@ -104,22 +95,21 @@ public class InsertionSort {
                     // Incrementing the counter everytime the counter 'j' is decremented
                     counter++;
                 }
+                // Incrementing the counter here because before exiting the loop the comparison will be carried out once
+                counter++;
     
                 arr[j+1] = key;
                 // Incrementing the counter everytime 'key' is assigned to the array index 'j+1'
                 counter++;
             }
+            // Incrementing the counter here because before exiting the loop the comparison will be carried out once
+            counter++;
 
             System.out.println();
             System.out.print("Sorted array: ");
             insertionSortObj.printArray(arr, totalNumberOfElements);
-            
-            TableColumn newTableColumn = new TableColumn(totalNumberOfElements, counter);
 
-
-            tableColumnsArray[tableElementsIndexCounter] = newTableColumn;
-            tableElementsIndexCounter++;
-            
+            inputToActualCountMap.put(totalNumberOfElements, counter);
 
             System.out.println("\n");
             totalNumberOfSets--;
@@ -129,9 +119,9 @@ public class InsertionSort {
 
         System.out.println(String.format("%10s %25s %10s %23s %10s", "N", "|", "Actual Count", "|", "Worst case T(N)"));
         System.out.println(String.format("%s", "----------------------------------------------------------------------------------------------------------------"));
-        for(int k=0; k<tableElementsIndexCounter; k++) {
-            System.out.println(String.format("%10d %25s %10d %25s %10d", tableColumnsArray[k].number_of_inputs, "|",
-            tableColumnsArray[k].actual_count, "|", (tableColumnsArray[k].number_of_inputs * tableColumnsArray[k].number_of_inputs)));
-        }
+
+        inputToActualCountMap.forEach((input, count) -> {
+            System.out.println(String.format("%10d %25s %10d %25s %10d", input, "|", count, "|", (input * input)));
+        });
     }
 }
