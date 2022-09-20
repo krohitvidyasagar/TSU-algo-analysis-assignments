@@ -1,4 +1,3 @@
-from cProfile import label
 import sys
 import random
 import math
