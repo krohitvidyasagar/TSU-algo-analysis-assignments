@@ -192,7 +192,7 @@ def __init__():
     plt.plot(x, y2, color='blue')
     plt.legend(['Actual Count', 'Theoretical Time Complexity'])
 
-    # plt.show()
+    plt.show()
 
     recursion_counter_array = []
     recursion_theoretical_time_complexity_array = []
