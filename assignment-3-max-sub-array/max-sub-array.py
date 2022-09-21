@@ -2,6 +2,9 @@ import math
 import sys
 import random
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 recursion_counter = [0]
 
 def generate_random_number(min: int, max: int):
@@ -129,6 +132,8 @@ def __init__():
 
     brute_force_input_to_counter_dict = dict()
 
+    recursion_input_to_counter_dict = dict()
+
     for num in range(0, total_number_of_sets):
         array_length = generate_random_number(50, 70)
 
@@ -150,9 +155,72 @@ def __init__():
 
         print('\nMax subarray sum using recursion')
         max_sum_recursion, left_index, right_index = max_sub_array_using_recursion(array, 0, array_length - 1)
+        recursion_input_to_counter_dict[array_length] = recursion_counter[0]
+
         print(f'Max Sum: {max_sum_recursion}, left index: {left_index + 1}, right index: {right_index + 1}')
         print(f'Sub-array: {array[left_index: right_index + 1]}')
         print(f'Number of inputs: {array_length}, Counter: {recursion_counter[0]}, Worst case: {round((array_length * math.log(array_length, 2)), 2)}')
+
+
+    input_length_array = []
+    counter_array = []
+    theoretical_time_complexity_array = []
+
+    for key in brute_force_input_to_counter_dict:
+        input_length_array.append(key)
+        counter_array.append(brute_force_input_to_counter_dict[key])
+        theoretical_time_complexity_array.append(key * key)
+
+    input_length_array.sort()
+    counter_array.sort()
+    theoretical_time_complexity_array.sort()
+
+    x = np.array(input_length_array)
+    y1 = np.array(counter_array)
+    y2 = np.array(theoretical_time_complexity_array)
+
+    plt.axis([50, 70, 1000, 5000])
+
+    plt.xticks([50, 55, 60, 65, 70])
+
+
+    plt.xlabel('Number of Inputs')
+    plt.ylabel('Time Complexity')
+    plt.title('Max Sub Array Time Complexity - Brute Force')
+
+    plt.plot(x, y1, color='red')
+    plt.plot(x, y2, color='blue')
+    plt.legend(['Actual Count', 'Theoretical Time Complexity'])
+
+    # plt.show()
+
+    recursion_counter_array = []
+    recursion_theoretical_time_complexity_array = []
+
+    for key in recursion_input_to_counter_dict:
+        recursion_counter_array.append(recursion_input_to_counter_dict[key])
+        recursion_theoretical_time_complexity_array.append(round((key * math.log(key, 2)), 2))
+
+    recursion_counter_array.sort()
+    recursion_theoretical_time_complexity_array.sort()
+
+    y3 = np.array(recursion_counter_array)
+    y4 = np.array(recursion_theoretical_time_complexity_array)
+
+    plt.axis([50, 70, 1000, 5000])
+
+    plt.xticks([50, 55, 60, 65, 70])
+
+
+    plt.xlabel('Number of Inputs')
+    plt.ylabel('Time Complexity')
+    plt.title('Max Sub Array Time Complexity - Recursion (Divide & Conquer)')
+
+    plt.plot(x, y3, color='yellow')
+    plt.plot(x, y4, color='green')
+    plt.legend(['Actual Count', 'Theoretical Time Complexity'])
+
+    plt.show()
 
 
 __init__()
