@@ -56,11 +56,13 @@ def max_sub_array_using_brute_force(arr):
 
 def max_crossing_sub_array_sum(arr, left_index, mid_index, right_index):
     """
+    Accepts the array, left index, mid index and right index and returns the max sum of a sub array and it's indices
     """
     current_sum = 0
     left_max_sum = -sys.maxsize
     left_max_begin_index = mid_index
 
+    # Iterate from the mid to left index and find the max left sum (Iterating back)
     for i in range(mid_index, left_index - 1, -1):
         current_sum = current_sum + arr[i]
 
@@ -73,6 +75,7 @@ def max_crossing_sub_array_sum(arr, left_index, mid_index, right_index):
     right_max_sum = -sys.maxsize
     right_max_end_index = mid_index
 
+    # Iterate from the mid to right index and find the max right sum (Iterating forward)
     for j in range(mid_index, right_index + 1):
         current_sum = current_sum + arr[j]
 
@@ -81,8 +84,11 @@ def max_crossing_sub_array_sum(arr, left_index, mid_index, right_index):
             right_max_sum = current_sum
             right_max_end_index = j
 
+    # Calcuate the crossing sum by adding the left max sum, right max sum
+    # Subtracting the mid-index because it is getting added twice (both in left max sum and right max sum)
     crossing_sum = left_max_sum + right_max_sum - arr[mid_index]
 
+    # Return the max sum from crossing sum, left sum and right sum
     if crossing_sum > left_max_sum and crossing_sum > right_max_sum:
         return crossing_sum, left_max_begin_index, right_max_end_index
     elif left_max_sum > crossing_sum and left_max_sum > right_max_sum:
@@ -106,6 +112,7 @@ def max_sub_array_using_recursion(arr, left_index, right_index):
     
     crossing_sub_array_sum, crossing_begin_index, crossing_end_index = max_crossing_sub_array_sum(arr, left_index, mid_index, right_index)
 
+    # Return the max sum from crossing sum, left sum and right sum
     if left_sub_array_sum > right_sub_array_sum  and left_sub_array_sum > crossing_sub_array_sum:
         return left_sub_array_sum, left_begin_index, left_end_index
     elif right_sub_array_sum > left_sub_array_sum and right_sub_array_sum > crossing_sub_array_sum:
