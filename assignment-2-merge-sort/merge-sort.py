@@ -42,7 +42,6 @@ def merge(arr: list, begin: int, mid: int, end: int, counter: list):
     j = 0
     k = begin
     
-
     while i < n1 and j < n2:
         if left_array[i] <= right_array[j]:
             increment_counter(counter)
