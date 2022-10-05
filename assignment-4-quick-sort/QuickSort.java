@@ -1,4 +1,6 @@
 import java.lang.Math;
+import java.util.Map;
+import java.util.HashMap;
 
 
 public class QuickSort {
@@ -37,12 +39,13 @@ public class QuickSort {
         arr[j] = temp;
     }
 
-    static int partitionLastElementPivot(int[] arr, int begin, int end, int size) {
+    static int partitionLastElementPivot(int[] arr, int begin, int end, int size, int[] counter) {
         int pivot = arr[end];
 
         int i = begin - 1;
 
         for (int j = begin; j <= end - 1; j++) {
+            counter[0]++;
             if (arr[j] < pivot) {
                 i++;
                 swap(arr, i, j);
@@ -50,6 +53,7 @@ public class QuickSort {
         }
 
         swap(arr, i + 1, end);
+        counter[0]++;
 
         System.out.println("After partition");
         printArray(arr, size);
@@ -58,18 +62,22 @@ public class QuickSort {
         return (i + 1);
     }
 
-    static void quickSortLastElementPivot(int[] arr, int begin, int end, int size) {
+    static void quickSortLastElementPivot(int[] arr, int begin, int end, int size, int[] counter) {
         if (begin < end) {
-            int pi = partitionLastElementPivot(arr, begin, end, size);
+            int pi = partitionLastElementPivot(arr, begin, end, size, counter);
 
-            quickSortLastElementPivot(arr, begin, pi-1, size);
+            quickSortLastElementPivot(arr, begin, pi-1, size, counter);
 
-            quickSortLastElementPivot(arr, pi+1, end, size);
+            quickSortLastElementPivot(arr, pi+1, end, size, counter);
         }
     }
 
     public static void main(String[] args) {
         QuickSort qs = new QuickSort();
+
+        Map<Integer, Integer> inputToActualCountMap = new HashMap<>();
+
+        int[] counter = {0};
 
         // Worst Case Arrays
         // Sorted in ascending order of length = 14
@@ -82,7 +90,9 @@ public class QuickSort {
         printArray(arr1, arr1.length);
 
         System.out.println("");
-        quickSortLastElementPivot(arr1, 0, arr1.length - 1, arr1.length);
+        quickSortLastElementPivot(arr1, 0, arr1.length - 1, arr1.length, counter);
+
+        inputToActualCountMap.put(arr1.length, counter[0]);
 
         System.out.println("Sorted first array");
         printArray(arr1, arr1.length);
@@ -92,8 +102,12 @@ public class QuickSort {
         System.out.println("Original second array");
         printArray(arr2, arr2.length);
 
+        counter[0] = 0;
+
         System.out.println("");
-        quickSortLastElementPivot(arr2, 0, arr2.length - 1, arr2.length);
+        quickSortLastElementPivot(arr2, 0, arr2.length - 1, arr2.length, counter);
+
+        inputToActualCountMap.put(arr2.length, counter[0]);
 
         System.out.println("Sorted second array");
         printArray(arr2, arr2.length);
@@ -107,16 +121,18 @@ public class QuickSort {
         int randomArrayLength;
 
         while (j < 4) {
+            counter[0] = 0;
             randomArrayLength = qs.getRandomNumber(10, 20);
 
             randomArray = qs.getInitializedRandomArray(randomArray, randomArrayLength);
-
 
             System.out.println("Original random array: " + j);
             printArray(randomArray, randomArrayLength);
     
             System.out.println("");
-            quickSortLastElementPivot(randomArray, 0, randomArrayLength - 1, randomArrayLength);
+            quickSortLastElementPivot(randomArray, 0, randomArrayLength - 1, randomArrayLength, counter);
+
+            inputToActualCountMap.put(randomArrayLength, counter[0]);
     
             System.out.println("Sorted random array: " + j);
             printArray(randomArray, randomArrayLength);
