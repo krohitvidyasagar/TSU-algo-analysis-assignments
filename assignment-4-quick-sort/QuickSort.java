@@ -72,6 +72,45 @@ public class QuickSort {
         }
     }
 
+    static int hoarePartition(int[] arr, int begin, int end, int size, int[] counter) {
+        int pivot = arr[begin];
+        int i = begin - 1, j = end + 1;
+ 
+        while (true) {
+            // Find leftmost element greater
+            // than or equal to pivot
+            do {
+                i++;
+            } while (arr[i] < pivot);
+ 
+            // Find rightmost element smaller
+            // than or equal to pivot
+            do {
+                j--;
+            } while (arr[j] > pivot);
+ 
+            // If two pointers met.
+            if (i >= j)
+                return j;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            // swap(arr[i], arr[j]);
+        }
+            
+    }
+
+
+    static void hoareQuickSort(int[] arr, int begin, int end, int size, int[] counter) {
+        if (begin < end) {
+            int pi = hoarePartition(arr, begin, end, size, counter);
+
+            hoareQuickSort(arr, begin, pi, size, counter);
+
+            hoareQuickSort(arr, pi+1, end, size, counter);
+        }
+    }
+
     public static void main(String[] args) {
         QuickSort qs = new QuickSort();
 
