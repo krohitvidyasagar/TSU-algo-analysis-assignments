@@ -2,49 +2,6 @@ import java.util.Scanner;
 
 class MatrixChainMultiplication {
 
-    // Matrix Ai has dimension p[i-1] x p[i] for i = 1..n
-    static int MatrixChainOrder(int p[], int n) {
-        /*
-         * For simplicity of the
-         * program, one extra row and
-         * one extra column are allocated in m[][]. 0th row
-         * and 0th column of m[][] are not used
-         */
-        int m[][] = new int[n][n];
-
-        int i, j, k, L, q;
-
-        /*
-         * m[i, j] = Minimum number of scalar
-         * multiplications needed to compute the matrix
-         * A[i]A[i+1]...A[j] = A[i..j] where
-         * dimension of A[i] is p[i-1] x p[i]
-         */
-
-        // cost is zero when multiplying one matrix.
-        for (i = 1; i < n; i++)
-            m[i][i] = 0;
-
-        // L is chain length.
-        for (L = 2; L < n; L++) {
-            for (i = 1; i < n - L + 1; i++) {
-                j = i + L - 1;
-                if (j == n)
-                    continue;
-                m[i][j] = Integer.MAX_VALUE;
-                for (k = i; k <= j - 1; k++) {
-                    // q = cost/scalar multiplications
-                    q = m[i][k] + m[k + 1][j]
-                            + p[i - 1] * p[k] * p[j];
-                    if (q < m[i][j])
-                        m[i][j] = q;
-                }
-            }
-        }
-
-        return m[1][n - 1];
-    }
-
     // Driver code
     public static void main(String args[]) {
         Scanner input = new Scanner(System.in);
@@ -62,9 +19,12 @@ class MatrixChainMultiplication {
             // Entering the dimensions
             // If there are 3 matrices with dimensions 10 X 20, 20 X 30, 30 X 15
             // The dimension will be entered as 10, 20, 30, 15 - Hence there are 1 more dimensions than there are matrices
+
+            int total_scalar_multiplications = 1;
             for (int i = 0; i <= number_of_matrices; i++) {
                 System.out.print("Please enter dimension " + i + " : ");
                 dimensions[i] = input.nextInt();
+                total_scalar_multiplications = total_scalar_multiplications * dimensions[i];
             }
 
 
@@ -74,31 +34,33 @@ class MatrixChainMultiplication {
             // Initialize the parenthesis matrix (S)
             int[][] s = new int[number_of_matrices + 1][number_of_matrices + 1];
 
-            for (int i = 1; i <= number_of_matrices; i++) {
+            for (int i = 0; i < number_of_matrices; i++) {
                 m[i][i] = 0;
             }
 
-            int total_number_of_multiplications;
+            int total_number_of_multiplications, min;
 
-            // Here index refers to the max number of outputs that need to be calculated in each row
-            // For example for index = 1 i.e. row 1 and number of matrices = 4 the number of outputs = 3
-            for (int index = 1; index < number_of_matrices; index++) {
+            // Here dimension refers to the max number of outputs that need to be calculated in each row
+            // For example for dimension = 1 i.e. row 1 and number of matrices = 4 the number of outputs = 3
+            for (int dimension = 1; dimension < number_of_matrices; dimension++) {
 
-                for (int left = 1; left <= number_of_matrices - index; left++) {
+                for (int i = 1; i < number_of_matrices + 1 - dimension; i++) {
                     
-                    int right = left + index;
+                    int j = i + dimension;
                     
-                    m[left][right] = Integer.MAX_VALUE;
+                    min = Integer.MAX_VALUE;
 
                     // Here 'k' refers to the k in Matrix mutiplication formula
-                    for (int k = left; k < right; k++) {
-                        total_number_of_multiplications = m[left][k] + m[k+1][right] + dimensions[left] * dimensions[k] * dimensions[right];
+                    for (int k = i; k <= j - 1; k++) {
 
-                        if (total_number_of_multiplications < m[left][right]) {
-                            m[left][right] = total_number_of_multiplications;
-                            s[left][right] = k;
+                        total_number_of_multiplications = m[i][k] + m[k+1][j] + dimensions[i-1] * dimensions[k] * dimensions[j];
+
+                        if (total_number_of_multiplications < min) {
+                            min = total_number_of_multiplications;
+                            s[i][j] = k;
                         }
                     }
+                    m[i][j] = min;
                 }
             }
 
@@ -128,18 +90,10 @@ class MatrixChainMultiplication {
 			    System.out.println("\n");
 		    }
 
+            System.out.println("\n\nMinimum number of matrix multiplication using dynamic programming: " + m[1][number_of_matrices]);
+            System.out.println("\nTotal number of scalar multiplication without dynamic programming: " + total_scalar_multiplications);
+
             count++;
         }
-
-        
-
-       
-
-        // int arr[] = new int[] { 1, 2, 3, 4 };
-        // int size = arr.length;
-
-        // System.out.println(
-        //         "Minimum number of multiplications is "
-        //                 + MatrixChainOrder(arr, size));
     }
 }
