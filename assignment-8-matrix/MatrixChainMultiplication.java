@@ -8,7 +8,7 @@ class MatrixChainMultiplication {
 
         int count = 0;
 
-        while (count < 1) {
+        while (count < 5) {
             System.out.println("Enter the number of matrices you wish to multiply:");
             int number_of_matrices = input.nextInt();
 
